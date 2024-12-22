@@ -30,7 +30,7 @@ const UserPanel = memo<PropsWithChildren>(({ children }) => {
         overlayInnerStyle={{ padding: 0 }}
         placement={'topRight'}
         rootClassName={styles.popover}
-        trigger={['click']}
+        trigger={[]}
       >
         {children}
       </Popover>
