@@ -7,6 +7,7 @@ import Temperature from './Temperature';
 import { MainToken, PortalToken } from './Token';
 import Tools from './Tools';
 import Upload from './Upload';
+import RagFile from "./RagFile";
 
 export const actionMap = {
   clear: Clear,
@@ -16,6 +17,7 @@ export const actionMap = {
   mainToken: MainToken,
   model: ModelSwitch,
   portalToken: PortalToken,
+  ragFile: RagFile,
   stt: STT,
   temperature: Temperature,
   tools: Tools,

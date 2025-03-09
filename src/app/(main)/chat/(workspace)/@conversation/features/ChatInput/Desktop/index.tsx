@@ -19,6 +19,7 @@ const leftActions = [
   'stt',
   'tools',
   'mainToken',
+  'ragFile',
 ] as ActionKeys[];
 
 const rightActions = ['clear'] as ActionKeys[];
