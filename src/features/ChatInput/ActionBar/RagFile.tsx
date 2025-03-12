@@ -1,7 +1,7 @@
-import React, { memo, useState } from 'react';
-import { Modal, Button, Upload, Input, message } from 'antd';
-import { FolderOutlined, SendOutlined, CloseOutlined } from '@ant-design/icons';
+import { CloseOutlined, FolderOutlined, SendOutlined } from '@ant-design/icons';
+import { Button, Input, Modal, Upload, message } from 'antd';
 import type { UploadProps } from 'antd';
+import React, { memo, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 
 const { TextArea } = Input;
@@ -10,8 +10,8 @@ const RagFile: React.FC = memo(() => {
   // 状态管理
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [messages, setMessages] = useState<Array<{text: string, sender: 'user' | 'bot'}>>([
-    {text: '您好！请上传文件并输入您的问题。', sender: 'bot'}
+  const [messages, setMessages] = useState<Array<{ text: string; sender: 'user' | 'bot' }>>([
+    { text: '您好！请上传文件并输入您的问题。', sender: 'bot' },
   ]);
   const [inputValue, setInputValue] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -41,11 +41,10 @@ const RagFile: React.FC = memo(() => {
   // 处理文件上传
   const uploadProps: UploadProps = {
     beforeUpload: (file) => {
-
       const acceptedTypes = [
-        'application/pdf',                                                  // PDF
+        'application/pdf', // PDF
         'application/vnd.openxmlformats-officedocument.wordprocessingml.document', // DOCX
-        'application/msword'                                                // DOC
+        'application/msword', // DOC
       ];
 
       if (!acceptedTypes.includes(file.type)) {
@@ -57,12 +56,12 @@ const RagFile: React.FC = memo(() => {
       return false;
     },
     showUploadList: false,
-    accept: '.pdf,.docx,.doc'
+    accept: '.pdf,.docx,.doc',
   };
 
   // 添加消息到聊天记录
   const addMessage = (text: string, sender: 'user' | 'bot') => {
-    setMessages(prev => [...prev, {text, sender}]);
+    setMessages((prev) => [...prev, { text, sender }]);
   };
 
   // 发送消息
@@ -86,7 +85,7 @@ const RagFile: React.FC = memo(() => {
     formData.append('query', inputValue);
 
     // 发送请求到API
-    fetch('http://localhost:6001/get_rag_response', {
+    fetch('http://192.168.1.200:6001/get_rag_response', {
       method: 'POST',
       body: formData,
       // 添加跨域请求头
@@ -94,13 +93,13 @@ const RagFile: React.FC = memo(() => {
         'Access-Control-Allow-Origin': '*',
       },
     })
-      .then(response => {
+      .then((response) => {
         if (!response.ok) {
           throw new Error('网络响应不正常');
         }
         return response.json();
       })
-      .then(data => {
+      .then((data) => {
         setIsLoading(false);
 
         if (data && data.result) {
@@ -109,7 +108,7 @@ const RagFile: React.FC = memo(() => {
           addMessage('收到了响应，但格式不正确', 'bot');
         }
       })
-      .catch(error => {
+      .catch((error) => {
         setIsLoading(false);
         console.error('Error:', error);
         addMessage(`发生错误: ${error.message}`, 'bot');
@@ -132,14 +131,13 @@ const RagFile: React.FC = memo(() => {
     }
   };
 
+  // @ts-ignore
+  // @ts-ignore
+  // @ts-ignore
+  // @ts-ignore
   return (
     <>
-      <Button
-        type="primary"
-        icon={<FolderOutlined />}
-        onClick={showModal}
-        title="RAG-Chat"
-      >
+      <Button type="primary" icon={<FolderOutlined />} onClick={showModal} title="RAG-Chat">
         打开RAG-Chat
       </Button>
 
@@ -152,32 +150,38 @@ const RagFile: React.FC = memo(() => {
         bodyStyle={{ padding: '32px' }}
         style={{ top: 20 }}
       >
-        <div style={{marginBottom: '24px'}}>
+        <div style={{ marginBottom: '24px' }}>
           <Upload {...uploadProps}>
-            <Button icon={<FolderOutlined/>} size="large">上传文件</Button>
+            <Button icon={<FolderOutlined />} size="large">
+              上传文件
+            </Button>
           </Upload>
-          <span style={{marginLeft: '12px', color: '#666', fontSize: '14px'}}>
+          <span style={{ marginLeft: '12px', color: '#666', fontSize: '14px' }}>
             支持的文件类型: PDF, DOCX, DOC
           </span>
         </div>
 
-        <div style={{
-          border: '1px solid #ddd',
-          borderRadius: '12px',
-          padding: '32px',
-          display: 'flex',
-          flexDirection: 'column',
-          height: '800px'
-        }}>
+        <div
+          style={{
+            border: '1px solid #ddd',
+            borderRadius: '12px',
+            padding: '32px',
+            display: 'flex',
+            flexDirection: 'column',
+            height: '800px',
+          }}
+        >
           {/* 聊天消息区域 */}
-          <div style={{
-            height: '680px',
-            overflowY: 'auto',
-            marginBottom: '24px',
-            padding: '24px',
-            border: '1px solid #eee',
-            borderRadius: '8px'
-          }}>
+          <div
+            style={{
+              height: '680px',
+              overflowY: 'auto',
+              marginBottom: '24px',
+              padding: '24px',
+              border: '1px solid #eee',
+              borderRadius: '8px',
+            }}
+          >
             {messages.map((msg, index) => (
               <div
                 key={index}
@@ -191,7 +195,7 @@ const RagFile: React.FC = memo(() => {
                   marginLeft: msg.sender === 'user' ? 'auto' : '0',
                   textAlign: msg.sender === 'user' ? 'right' : 'left',
                   fontSize: '16px',
-                  boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                  boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
                 }}
               >
                 {msg.sender === 'user' ? (
@@ -203,12 +207,52 @@ const RagFile: React.FC = memo(() => {
                       ul: ({ children }) => <ul style={{ paddingLeft: '20px' }}>{children}</ul>,
                       ol: ({ children }) => <ol style={{ paddingLeft: '20px' }}>{children}</ol>,
                       li: ({ children }) => <li style={{ margin: '4px 0' }}>{children}</li>,
-                      a: ({ href, children }) => <a href={href} target="_blank" rel="noopener noreferrer" style={{ color: '#1890ff' }}>{children}</a>,
+                      a: ({ href, children }) => (
+                        <a
+                          href={href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{ color: '#1890ff' }}
+                        >
+                          {children}
+                        </a>
+                      ),
+                      // @ts-ignore
                       code: ({ inline, children }) =>
-                        inline
-                          ? <code style={{ backgroundColor: 'rgba(0,0,0,0.05)', padding: '2px 4px', borderRadius: '3px' }}>{children}</code>
-                          : <pre style={{ backgroundColor: 'rgba(0,0,0,0.05)', padding: '12px', borderRadius: '5px', overflowX: 'auto' }}><code>{children}</code></pre>,
-                      blockquote: ({ children }) => <blockquote style={{ borderLeft: '4px solid #ddd', paddingLeft: '16px', margin: '16px 0', color: '#666' }}>{children}</blockquote>,
+                        inline ? (
+                          <code
+                            style={{
+                              backgroundColor: 'rgba(0,0,0,0.05)',
+                              padding: '2px 4px',
+                              borderRadius: '3px',
+                            }}
+                          >
+                            {children}
+                          </code>
+                        ) : (
+                          <pre
+                            style={{
+                              backgroundColor: 'rgba(0,0,0,0.05)',
+                              padding: '12px',
+                              borderRadius: '5px',
+                              overflowX: 'auto',
+                            }}
+                          >
+                            <code>{children}</code>
+                          </pre>
+                        ),
+                      blockquote: ({ children }) => (
+                        <blockquote
+                          style={{
+                            borderLeft: '4px solid #ddd',
+                            paddingLeft: '16px',
+                            margin: '16px 0',
+                            color: '#666',
+                          }}
+                        >
+                          {children}
+                        </blockquote>
+                      ),
                     }}
                   >
                     {msg.text}
@@ -240,14 +284,16 @@ const RagFile: React.FC = memo(() => {
                 paddingRight: '150px',
                 fontSize: '16px',
                 borderRadius: '10px',
-                padding: '16px'
+                padding: '16px',
               }}
             />
-            <div style={{
-              position: 'absolute',
-              bottom: '16px',
-              right: '16px'
-            }}>
+            <div
+              style={{
+                position: 'absolute',
+                bottom: '16px',
+                right: '16px',
+              }}
+            >
               <Button
                 type="primary"
                 icon={<SendOutlined />}

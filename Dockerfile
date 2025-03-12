@@ -77,12 +77,8 @@ RUN \
         npm config set registry "https://registry.npmmirror.com/"; \
         echo 'canvas_binary_host_mirror=https://npmmirror.com/mirrors/canvas' >> .npmrc; \
     fi \
-    # Set the registry for corepack
-    && export COREPACK_NPM_REGISTRY=$(npm config get registry | sed 's/\/$//') \
-    # Enable corepack
-    && corepack enable \
-    # Use pnpm for corepack
-    && corepack use pnpm \
+    # Install pnpm globally
+    && npm install -g pnpm@10.6.1 \
     # Install the dependencies
     && pnpm i \
     # Add sharp dependencies
